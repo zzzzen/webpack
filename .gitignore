@@ -8,10 +8,6 @@ package-lock.json
 /cgi-bin/*
 /node_modules/*
 /bower_components/*
-/vendor/*
-/local/logs/*
-/local/templates/**/css/*
-/local/templates/**/js/*
-/local/assets/build/*
+/local/assets/dist/*
 *.code-workspace
 *.log
