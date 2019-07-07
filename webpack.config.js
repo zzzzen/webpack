@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const autoprefixer = require("autoprefixer");
+const StyleLintPlugin = require('stylelint-webpack-plugin');
 
 //Проверка на тип сборки
 const isDev = process.env.NODE_ENV === 'production';
@@ -17,19 +18,35 @@ const srcJS = {
 };
 
 //Объект с путям к точкам входа, передаваемый в вебпак
-const entry = {};
-entry[srcJS.first] = srcJS.first;
-entry[srcJS.sec] = srcJS.sec;
+// const entry = {};
+// entry[srcJS.first] = srcJS.first;
+// entry[srcJS.sec] = srcJS.sec;
 
 module.exports = {
   context: path.resolve(__dirname, src),
-  entry: entry,
+  entry: srcJS,
   output: {
-    filename: '[name]',
+    filename: 'js/[name].js',
     path: path.resolve(__dirname, dist),
+  },
+  devServer: {
+    contentBase: path.resolve(__dirname, dist),
+    compress: true,
+    port: 9000
   },
   module: {
     rules: [
+      {
+        enforce: "pre",
+        test: /\.js$/,
+        exclude: /node_modules/,
+        loader: "eslint-loader",
+        options: {
+          emitError: true,
+          emitWarning: true,
+          eslintrc: false
+        }
+      },
       {
         test: /\.m?js$/,
         include: path.resolve(__dirname, src),
@@ -88,15 +105,20 @@ module.exports = {
       },
     ]
   },
+  devtool: isDev ? "source-map" : isDev,
   plugins: [
     new HtmlWebpackPlugin({
       template: './html/first/index.html',
       filename: './html/first/index.html',
-      chunks: []
+      chunks: ['first']
+    }),
+    new StyleLintPlugin({
+      configFile: "./.stylelintrc",
+      emitErrors: true,
+      syntax: "scss"
     }),
     new MiniCssExtractPlugin({
-      filename: '[name].css',
-      chunkFilename: '[id].css'
+      filename: 'css/[name].css'
     })
   ]
 };
