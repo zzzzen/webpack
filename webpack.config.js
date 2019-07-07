@@ -1,8 +1,9 @@
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const autoprefixer = require("autoprefixer");
 const StyleLintPlugin = require('stylelint-webpack-plugin');
+const CopyPlugin = require("copy-webpack-plugin");
+const autoprefixer = require("autoprefixer");
 
 //Проверка на тип сборки
 const isDev = process.env.NODE_ENV === 'production';
@@ -10,6 +11,8 @@ const isDev = process.env.NODE_ENV === 'production';
 //Пути к папкам с исходными и собранными файлами
 const src = './local/assets/src/';
 const dist = './local/assets/dist/';
+const srcImg = 'img';
+const srcFonts = 'fonts';
 
 //Пути к точкам входа
 const srcJS = {
@@ -36,17 +39,17 @@ module.exports = {
   },
   module: {
     rules: [
-      {
-        enforce: "pre",
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: "eslint-loader",
-        options: {
-          emitError: true,
-          emitWarning: true,
-          eslintrc: false
-        }
-      },
+      // {
+      //   enforce: "pre",
+      //   test: /\.js$/,
+      //   exclude: /node_modules/,
+      //   loader: "eslint-loader",
+      //   options: {
+      //     emitError: true,
+      //     emitWarning: true,
+      //     eslintrc: false
+      //   }
+      // },
       {
         test: /\.m?js$/,
         include: path.resolve(__dirname, src),
@@ -119,6 +122,18 @@ module.exports = {
     }),
     new MiniCssExtractPlugin({
       filename: 'css/[name].css'
-    })
+    }),
+    new CopyPlugin([
+      {
+        from: path.resolve(__dirname, src + srcFonts),
+        to: path.resolve(__dirname, dist + srcFonts),
+        force: true
+      },
+      {
+        from: path.resolve(__dirname, src + srcImg),
+        to: path.resolve(__dirname, dist + srcImg),
+        force: true
+      }
+    ]),
   ]
 };
