@@ -1,3 +1,3 @@
-import {a}  from './blocks/one';
+import {a}  from "./blocks/one";
 
 console.log(a);

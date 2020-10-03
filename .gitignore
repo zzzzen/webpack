@@ -11,3 +11,4 @@ package-lock.json
 /local/assets/dist/*
 *.code-workspace
 *.log
+.eslintcache

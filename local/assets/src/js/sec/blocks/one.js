@@ -1,1 +1,1 @@
-export let a = 'qwer';
+export let a = "qwer";
